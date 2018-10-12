@@ -21,50 +21,35 @@
  *   along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-
-#include <stdio.h>
-
-
-#include "common/net/Job.h"
-#include "net/JobResult.h"
+#ifndef __BASICLOG_H__
+#define __BASICLOG_H__
 
 
-JobResult::JobResult(int64_t id, const char *jobId, const char *nonce, const char *result, const xmrig::Algorithm &algorithm) :
-    nonce(nonce),
-    result(result),
-    id(id),
-    diff(0),
-    algorithm(algorithm),
-    jobId(jobId, 3),
-    m_actualDiff(0)
-{
-    if (result && strlen(result) == 64) {
-        uint64_t target = 0;
-        Job::fromHex(result + 48, 16, reinterpret_cast<unsigned char*>(&target));
+#include <uv.h>
 
-        if (target > 0) {
-            m_actualDiff = Job::toDiff(target);
-        }
-    }
+
+#include "common/interfaces/ILogBackend.h"
+
+
+namespace xmrig {
+    class Controller;
 }
 
 
-bool JobResult::isCompatible(uint8_t fixedByte) const
+class BasicLog : public ILogBackend
 {
-    uint8_t n[4];
-    if (!Job::fromHex(nonce, 8, n)) {
-        return false;
-    }
+public:
+    BasicLog();
 
-    return n[3] == fixedByte;
-}
+    void message(Level level, const char *fmt, va_list args) override;
+    void text(const char *fmt, va_list args) override;
 
+private:
+    bool isWritable() const;
+    void print(va_list args);
 
-bool JobResult::isValid() const
-{
-    if (!nonce || m_actualDiff == 0) {
-        return false;
-    }
+    char m_buf[kBufferSize];
+    char m_fmt[256];
+};
 
-    return strlen(nonce) == 8 && jobId.isValid();
-}
+#endif /* __BASICLOG_H__ */

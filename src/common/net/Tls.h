@@ -21,50 +21,42 @@
  *   along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-
-#include <stdio.h>
-
-
-#include "common/net/Job.h"
-#include "net/JobResult.h"
+#ifndef XMRIG_TLS_H
+#define XMRIG_TLS_H
 
 
-JobResult::JobResult(int64_t id, const char *jobId, const char *nonce, const char *result, const xmrig::Algorithm &algorithm) :
-    nonce(nonce),
-    result(result),
-    id(id),
-    diff(0),
-    algorithm(algorithm),
-    jobId(jobId, 3),
-    m_actualDiff(0)
+#include <openssl/ssl.h>
+
+
+#include "common/net/Client.h"
+
+
+class Client::Tls
 {
-    if (result && strlen(result) == 64) {
-        uint64_t target = 0;
-        Job::fromHex(result + 48, 16, reinterpret_cast<unsigned char*>(&target));
+public:
+    Tls(Client *client);
+    ~Tls();
 
-        if (target > 0) {
-            m_actualDiff = Job::toDiff(target);
-        }
-    }
-}
+    bool handshake();
+    bool send(const char *data, size_t size);
+    const char *fingerprint() const;
+    const char *version() const;
+    void read(const char *data, size_t size);
+
+private:
+    bool send();
+    bool verify(X509 *cert);
+    bool verifyFingerprint(X509 *cert);
+
+    BIO *m_readBio;
+    BIO *m_writeBio;
+    bool m_ready;
+    char m_buf[1024 * 2];
+    char m_fingerprint[32 * 2 + 8];
+    Client *m_client;
+    SSL *m_ssl;
+    SSL_CTX *m_ctx;
+};
 
 
-bool JobResult::isCompatible(uint8_t fixedByte) const
-{
-    uint8_t n[4];
-    if (!Job::fromHex(nonce, 8, n)) {
-        return false;
-    }
-
-    return n[3] == fixedByte;
-}
-
-
-bool JobResult::isValid() const
-{
-    if (!nonce || m_actualDiff == 0) {
-        return false;
-    }
-
-    return strlen(nonce) == 8 && jobId.isValid();
-}
+#endif /* XMRIG_TLS_H */

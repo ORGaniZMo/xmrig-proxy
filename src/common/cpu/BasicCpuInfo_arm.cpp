@@ -21,50 +21,27 @@
  *   along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-
-#include <stdio.h>
-
-
-#include "common/net/Job.h"
-#include "net/JobResult.h"
+#include <string.h>
+#include <thread>
 
 
-JobResult::JobResult(int64_t id, const char *jobId, const char *nonce, const char *result, const xmrig::Algorithm &algorithm) :
-    nonce(nonce),
-    result(result),
-    id(id),
-    diff(0),
-    algorithm(algorithm),
-    jobId(jobId, 3),
-    m_actualDiff(0)
+#include "common/cpu/BasicCpuInfo.h"
+
+
+xmrig::BasicCpuInfo::BasicCpuInfo() :
+    m_aes(false),
+    m_brand(),
+    m_threads(std::thread::hardware_concurrency())
 {
-    if (result && strlen(result) == 64) {
-        uint64_t target = 0;
-        Job::fromHex(result + 48, 16, reinterpret_cast<unsigned char*>(&target));
+    memcpy(m_brand, "Unknown", 7);
 
-        if (target > 0) {
-            m_actualDiff = Job::toDiff(target);
-        }
-    }
+#   if __ARM_FEATURE_CRYPTO
+    m_aes = true;
+#   endif
 }
 
 
-bool JobResult::isCompatible(uint8_t fixedByte) const
+size_t xmrig::BasicCpuInfo::optimalThreadsCount(size_t memSize, int maxCpuUsage) const
 {
-    uint8_t n[4];
-    if (!Job::fromHex(nonce, 8, n)) {
-        return false;
-    }
-
-    return n[3] == fixedByte;
-}
-
-
-bool JobResult::isValid() const
-{
-    if (!nonce || m_actualDiff == 0) {
-        return false;
-    }
-
-    return strlen(nonce) == 8 && jobId.isValid();
+    return threads();
 }

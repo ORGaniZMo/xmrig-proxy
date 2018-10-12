@@ -51,6 +51,8 @@ Options:\n\
   -u, --user=USERNAME      username for mining server\n\
   -p, --pass=PASSWORD      password for mining server\n\
       --rig-id=ID          rig identifier for pool-side statistics (needs pool support)\n\
+      --tls                enable SSL/TLS support (needs pool support)\n\
+      --tls-fingerprint=F  pool TLS certificate fingerprint, if set enable strict certificate pinning\n\
   -k, --keepalive          prevent timeout (needs pool support)\n\
   -r, --retries=N          number of times to retry before switch to backup server (default: 1)\n\
   -R, --retry-pause=N      time to pause between retries (default: 1 second)\n\
@@ -108,6 +110,7 @@ static struct option const options[] = {
     { "no-color",          0, nullptr, xmrig::IConfig::ColorKey          },
     { "no-watch",          0, nullptr, xmrig::IConfig::WatchKey          },
     { "no-workers",        0, nullptr, xmrig::IConfig::WorkersKey        },
+    { "workers",           1, nullptr, xmrig::IConfig::WorkersAdvKey     },
     { "pass",              1, nullptr, xmrig::IConfig::PasswordKey       },
     { "pool-coin",         1, nullptr, xmrig::IConfig::PoolCoinKey       },
     { "retries",           1, nullptr, xmrig::IConfig::RetriesKey        },
@@ -123,6 +126,8 @@ static struct option const options[] = {
     { "reuse-timeout",     1, nullptr, xmrig::IConfig::ReuseTimeoutKey   },
     { "mode",              1, nullptr, xmrig::IConfig::ModeKey           },
     { "rig-id",            1, nullptr, xmrig::IConfig::RigIdKey          },
+    { "tls",               0, nullptr, xmrig::IConfig::TlsKey            },
+    { "tls-fingerprint",   1, nullptr, xmrig::IConfig::FingerprintKey    },
     { nullptr,             0, nullptr, 0 }
 };
 
@@ -143,7 +148,7 @@ static struct option const config_options[] = {
     { "user-agent",       1, nullptr, xmrig::IConfig::UserAgentKey      },
     { "verbose",          0, nullptr, xmrig::IConfig::VerboseKey        },
     { "watch",            0, nullptr, xmrig::IConfig::WatchKey          },
-    { "workers",          0, nullptr, xmrig::IConfig::WorkersKey        },
+    { "workers",          1, nullptr, xmrig::IConfig::WorkersAdvKey     },
     { "reuse-timeout",    1, nullptr, xmrig::IConfig::ReuseTimeoutKey   },
     { "mode",             1, nullptr, xmrig::IConfig::ModeKey           },
     { nullptr,            0, nullptr, 0 }
@@ -151,14 +156,16 @@ static struct option const config_options[] = {
 
 
 static struct option const pool_options[] = {
-    { "url",           1, nullptr, xmrig::IConfig::UrlKey        },
-    { "pass",          1, nullptr, xmrig::IConfig::PasswordKey   },
-    { "user",          1, nullptr, xmrig::IConfig::UserKey       },
-    { "userpass",      1, nullptr, xmrig::IConfig::UserpassKey   },
-    { "keepalive",     2, nullptr, xmrig::IConfig::KeepAliveKey  },
-    { "variant",       1, nullptr, xmrig::IConfig::VariantKey    },
-    { "rig-id",        1, nullptr, xmrig::IConfig::RigIdKey      },
-    { nullptr,         0, nullptr, 0 }
+    { "url",              1, nullptr, xmrig::IConfig::UrlKey         },
+    { "pass",             1, nullptr, xmrig::IConfig::PasswordKey    },
+    { "user",             1, nullptr, xmrig::IConfig::UserKey        },
+    { "userpass",         1, nullptr, xmrig::IConfig::UserpassKey    },
+    { "keepalive",        2, nullptr, xmrig::IConfig::KeepAliveKey   },
+    { "variant",          1, nullptr, xmrig::IConfig::VariantKey     },
+    { "rig-id",           1, nullptr, xmrig::IConfig::RigIdKey       },
+    { "tls",              0, nullptr, xmrig::IConfig::TlsKey         },
+    { "tls-fingerprint",  1, nullptr, xmrig::IConfig::FingerprintKey },
+    { nullptr,            0, nullptr, 0 }
 };
 
 

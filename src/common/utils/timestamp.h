@@ -21,50 +21,27 @@
  *   along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-
-#include <stdio.h>
-
-
-#include "common/net/Job.h"
-#include "net/JobResult.h"
+#ifndef XMRIG_TIMESTAMP_H
+#define XMRIG_TIMESTAMP_H
 
 
-JobResult::JobResult(int64_t id, const char *jobId, const char *nonce, const char *result, const xmrig::Algorithm &algorithm) :
-    nonce(nonce),
-    result(result),
-    id(id),
-    diff(0),
-    algorithm(algorithm),
-    jobId(jobId, 3),
-    m_actualDiff(0)
+#include <chrono>
+
+
+namespace xmrig {
+
+
+static inline int64_t currentMSecsSinceEpoch()
 {
-    if (result && strlen(result) == 64) {
-        uint64_t target = 0;
-        Job::fromHex(result + 48, 16, reinterpret_cast<unsigned char*>(&target));
-
-        if (target > 0) {
-            m_actualDiff = Job::toDiff(target);
-        }
+    using namespace std::chrono;
+    if (high_resolution_clock::is_steady) {
+        return time_point_cast<milliseconds>(high_resolution_clock::now()).time_since_epoch().count();
     }
+
+    return time_point_cast<milliseconds>(steady_clock::now()).time_since_epoch().count();
 }
 
 
-bool JobResult::isCompatible(uint8_t fixedByte) const
-{
-    uint8_t n[4];
-    if (!Job::fromHex(nonce, 8, n)) {
-        return false;
-    }
+} /* namespace xmrig */
 
-    return n[3] == fixedByte;
-}
-
-
-bool JobResult::isValid() const
-{
-    if (!nonce || m_actualDiff == 0) {
-        return false;
-    }
-
-    return strlen(nonce) == 8 && jobId.isValid();
-}
+#endif /* XMRIG_TIMESTAMP_H */

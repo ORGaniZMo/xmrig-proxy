@@ -22,49 +22,68 @@
  */
 
 
+#include <stdarg.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <time.h>
+
+#ifdef WIN32
+#   include <winsock2.h>
+#   include <windows.h>
+#endif
 
 
-#include "common/net/Job.h"
-#include "net/JobResult.h"
+#include "common/log/BasicLog.h"
+#include "common/log/Log.h"
 
 
-JobResult::JobResult(int64_t id, const char *jobId, const char *nonce, const char *result, const xmrig::Algorithm &algorithm) :
-    nonce(nonce),
-    result(result),
-    id(id),
-    diff(0),
-    algorithm(algorithm),
-    jobId(jobId, 3),
-    m_actualDiff(0)
+BasicLog::BasicLog()
 {
-    if (result && strlen(result) == 64) {
-        uint64_t target = 0;
-        Job::fromHex(result + 48, 16, reinterpret_cast<unsigned char*>(&target));
-
-        if (target > 0) {
-            m_actualDiff = Job::toDiff(target);
-        }
-    }
 }
 
 
-bool JobResult::isCompatible(uint8_t fixedByte) const
+void BasicLog::message(Level level, const char* fmt, va_list args)
 {
-    uint8_t n[4];
-    if (!Job::fromHex(nonce, 8, n)) {
-        return false;
-    }
+    time_t now = time(nullptr);
+    tm stime;
 
-    return n[3] == fixedByte;
+#   ifdef _WIN32
+    localtime_s(&stime, &now);
+#   else
+    localtime_r(&now, &stime);
+#   endif
+
+    snprintf(m_fmt, sizeof(m_fmt) - 1, "[%d-%02d-%02d %02d:%02d:%02d]%s %s%s",
+             stime.tm_year + 1900,
+             stime.tm_mon + 1,
+             stime.tm_mday,
+             stime.tm_hour,
+             stime.tm_min,
+             stime.tm_sec,
+             Log::colorByLevel(level, false),
+             fmt,
+             Log::endl(false)
+        );
+
+    print(args);
 }
 
 
-bool JobResult::isValid() const
+void BasicLog::text(const char* fmt, va_list args)
 {
-    if (!nonce || m_actualDiff == 0) {
-        return false;
+    snprintf(m_fmt, sizeof(m_fmt) - 1, "%s%s", fmt, Log::endl(false));
+
+    print(args);
+}
+
+
+void BasicLog::print(va_list args)
+{
+    if (vsnprintf(m_buf, sizeof(m_buf) - 1, m_fmt, args) <= 0) {
+        return;
     }
 
-    return strlen(nonce) == 8 && jobId.isValid();
+    fputs(m_buf, stdout);
+    fflush(stdout);
 }
