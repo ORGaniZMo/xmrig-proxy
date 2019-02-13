@@ -95,6 +95,8 @@ Both miner and pool should support short algorithm name aliases:
 | `cryptonight/xao`        | `cn/xao`        | `"xao"`     | Alloy (XAO)                                          |
 | `cryptonight/rto`        | `cn/rto`        | `"rto"`     | Arto (RTO)                                           |
 | `cryptonight/half`       | `cn/half`       | `"half"`    | CryptoNight variant 2 with half iterations.          |
+| `cryptonight/gpu`        | `cn/gpu`        | `"gpu"`     | CryptoNight-GPU (RYO).                               |
+| `cryptonight/wow`        | `cn/wow`        | `"wow"`     | Wownero (WOW).                                       |
 | `cryptonight-lite`       | `cn-lite`       | `-1`        | Autodetect works only for Aeon.                      |
 | `cryptonight-lite/0`     | `cn-lite/0`     | `0`         | Original/old CryptoNight-Lite.                       |
 | `cryptonight-lite/1`     | `cn-lite/1`     | `1`         | Also known as `aeon7`                                |
@@ -102,6 +104,7 @@ Both miner and pool should support short algorithm name aliases:
 | `cryptonight-heavy`      | `cn-heavy`      | `0`         | Ryo and Loki                                         |
 | `cryptonight-heavy/xhv`  | `cn-heavy/xhv`  | `"xhv"`     | Haven Protocol                                       |
 | `cryptonight-heavy/tube` | `cn-heavy/tube` | `"tube"`    | BitTube (TUBE)                                       |
+| `cryptonight-pico/trtl`  | `cn-pico/trtl`  | `"trtl"`    | TurtleCoin (TRTL)                                    |
 
 Proper pool/proxy implementation should avoid any automatic/autodetect variants, variant must explicitly specified.
 
