@@ -223,7 +223,6 @@ rapidjson::Value Pool::toJSON(rapidjson::Document &doc) const
     case xmrig::VARIANT_AUTO:
     case xmrig::VARIANT_0:
     case xmrig::VARIANT_1:
-    case xmrig::VARIANT_2:
         obj.AddMember("variant", m_algorithm.variant(), allocator);
         break;
 
