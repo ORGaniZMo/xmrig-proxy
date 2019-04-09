@@ -62,6 +62,7 @@ static AlgoData const algorithms[] = {
     { "cryptonight/xao",       "cn/xao",       xmrig::CRYPTONIGHT,       xmrig::VARIANT_XAO  },
     { "cryptonight/rto",       "cn/rto",       xmrig::CRYPTONIGHT,       xmrig::VARIANT_RTO  },
     { "cryptonight/2",         "cn/2",         xmrig::CRYPTONIGHT,       xmrig::VARIANT_2    },
+    { "cryptonight/xfh",       "cn/xfh",       xmrig::CRYPTONIGHT,       xmrig::VARIANT_XFH  },
     { "cryptonight/half",      "cn/half",      xmrig::CRYPTONIGHT,       xmrig::VARIANT_HALF },
     { "cryptonight/xtlv9",     "cn/xtlv9",     xmrig::CRYPTONIGHT,       xmrig::VARIANT_HALF },
     { "cryptonight/wow",       "cn/wow",       xmrig::CRYPTONIGHT,       xmrig::VARIANT_WOW  },
@@ -71,6 +72,7 @@ static AlgoData const algorithms[] = {
     { "cryptonight-light",     "cn-light",     xmrig::CRYPTONIGHT_LITE,  xmrig::VARIANT_AUTO },
     { "cryptonight-lite/0",    "cn-lite/0",    xmrig::CRYPTONIGHT_LITE,  xmrig::VARIANT_0    },
     { "cryptonight-lite/1",    "cn-lite/1",    xmrig::CRYPTONIGHT_LITE,  xmrig::VARIANT_1    },
+    { "cryptonight-lite/upx",  "cn-lite/upx",  xmrig::CRYPTONIGHT_LITE,  xmrig::VARIANT_UPX  },
 #   endif
 
 #   ifndef XMRIG_NO_SUMO
@@ -112,6 +114,7 @@ static AlgoData const xmrStakAlgorithms[] = {
     { "cryptonight_alloy",       nullptr, xmrig::CRYPTONIGHT,       xmrig::VARIANT_XAO  }, // xmr-stak-alloy
     { "cryptonight_turtle",      nullptr, xmrig::CRYPTONIGHT_PICO,  xmrig::VARIANT_TRTL },
     { "cryptonight_gpu",         nullptr, xmrig::CRYPTONIGHT,       xmrig::VARIANT_GPU  },
+    { "cryptonight_freehaven",   nullptr, xmrig::CRYPTONIGHT,       xmrig::VARIANT_XFH  }, // xmr-stak-freehaven
 };
 #endif
 
@@ -130,6 +133,8 @@ static const char *variants[] = {
     "trtl",
     "gpu",
     "wow",
+    "xfh",
+    "upx"
 };
 
 
