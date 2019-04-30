@@ -69,7 +69,6 @@ static AlgoData const algorithms[] = {
     { "cryptonight/rwz",       "cn/rwz",       xmrig::CRYPTONIGHT,       xmrig::VARIANT_RWZ    },
     { "cryptonight/zls",       "cn/zls",       xmrig::CRYPTONIGHT,       xmrig::VARIANT_ZLS    },
     { "cryptonight/double",    "cn/double",    xmrig::CRYPTONIGHT,       xmrig::VARIANT_DOUBLE },
-    { "cryptonight/xfh",       "cn/xfh",       xmrig::CRYPTONIGHT,       xmrig::VARIANT_XFH    },
 
 #   ifndef XMRIG_NO_AEON
     { "cryptonight-lite",      "cn-lite",      xmrig::CRYPTONIGHT_LITE,  xmrig::VARIANT_AUTO },
@@ -92,6 +91,12 @@ static AlgoData const algorithms[] = {
     { "cryptonight-turtle",     "cn-trtl",       xmrig::CRYPTONIGHT_PICO, xmrig::VARIANT_TRTL },
     { "cryptonight-ultralite",  "cn-ultralite",  xmrig::CRYPTONIGHT_PICO, xmrig::VARIANT_TRTL },
     { "cryptonight_turtle",     "cn_turtle",     xmrig::CRYPTONIGHT_PICO, xmrig::VARIANT_TRTL },
+    { "cryptonight-ultralite/turtle", "cn-ultralite/turtle", xmrig::CRYPTONIGHT_PICO, xmrig::VARIANT_TRTL },
+#   endif
+
+#   ifndef XMRIG_NO_CN_EXTREMELITE
+    { "cryptonight-extremelite/upx2", "cn-extremelite/upx2", xmrig::CRYPTONIGHT_EXTREMELITE, xmrig::VARIANT_UPX2 },
+    { "cryptonight-extremelite",      "cn-extremelite",      xmrig::CRYPTONIGHT_EXTREMELITE, xmrig::VARIANT_UPX2 },
 #   endif
 
 #   ifndef XMRIG_NO_CN_GPU
@@ -113,13 +118,11 @@ static AlgoData const xmrStakAlgorithms[] = {
     { "cryptonight_heavy",       nullptr, xmrig::CRYPTONIGHT_HEAVY, xmrig::VARIANT_0    },
     { "cryptonight_haven",       nullptr, xmrig::CRYPTONIGHT_HEAVY, xmrig::VARIANT_XHV  },
     { "cryptonight_masari",      nullptr, xmrig::CRYPTONIGHT,       xmrig::VARIANT_MSR  },
-    { "cryptonight_masari",      nullptr, xmrig::CRYPTONIGHT,       xmrig::VARIANT_MSR  },
     { "cryptonight-bittube2",    nullptr, xmrig::CRYPTONIGHT_HEAVY, xmrig::VARIANT_TUBE }, // bittube-miner
     { "cryptonight_alloy",       nullptr, xmrig::CRYPTONIGHT,       xmrig::VARIANT_XAO  }, // xmr-stak-alloy
     { "cryptonight_turtle",      nullptr, xmrig::CRYPTONIGHT_PICO,  xmrig::VARIANT_TRTL },
     { "cryptonight_gpu",         nullptr, xmrig::CRYPTONIGHT,       xmrig::VARIANT_GPU  },
     { "cryptonight_r",           nullptr, xmrig::CRYPTONIGHT,       xmrig::VARIANT_4    },
-    { "cryptonight_freehaven",   nullptr, xmrig::CRYPTONIGHT,       xmrig::VARIANT_XFH  }, // xmr-stak-freehaven
 };
 #endif
 
@@ -142,8 +145,8 @@ static const char *variants[] = {
     "rwz",
     "zls",
     "double",
-    "xfh",
-    "upx"
+    "upx",
+    "upx2"
 };
 
 
@@ -260,6 +263,10 @@ void xmrig::Algorithm::setAlgo(Algo algo)
 
     if (m_algo == CRYPTONIGHT_PICO && m_variant == VARIANT_AUTO) {
         m_variant = xmrig::VARIANT_TRTL;
+    }
+
+    if (m_algo == CRYPTONIGHT_EXTREMELITE && m_variant == VARIANT_AUTO) {
+        m_variant = xmrig::VARIANT_UPX2;
     }
 }
 

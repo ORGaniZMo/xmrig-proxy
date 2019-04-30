@@ -255,6 +255,12 @@ xmrig::Variant xmrig::Job::variant() const
     case CRYPTONIGHT_LITE:
         return VARIANT_1;
 
+    case CRYPTONIGHT_PICO:
+        return VARIANT_TRTL;
+
+    case CRYPTONIGHT_EXTREMELITE:
+         return VARIANT_UPX2;
+
     case CRYPTONIGHT_HEAVY:
         return VARIANT_0;
 
