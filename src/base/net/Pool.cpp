@@ -500,7 +500,6 @@ void xmrig::Pool::rebuild()
     addVariant(VARIANT_RWZ);
     addVariant(VARIANT_ZLS);
     addVariant(VARIANT_DOUBLE);
-    addVariant(VARIANT_XFH);
     addVariant(VARIANT_UPX);
     addVariant(VARIANT_AUTO);
 #   endif
