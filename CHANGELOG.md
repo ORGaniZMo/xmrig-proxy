@@ -1,3 +1,29 @@
+# v2.16.1-beta
+- Added RandomXL algorithm for [Loki](https://loki.network/).
+  - Algorithm name used by proxy is `randomx/loki` or `rx/loki`.
+  
+# v2.16.0-beta
+- [#1036](https://github.com/xmrig/xmrig/pull/1036) Added RandomWOW (RandomX with different preferences) algorithm support for [Wownero](http://wownero.org/).
+  - Algorithm name used by proxy is `randomx/wow` or `rx/wow`.
+  - Currently runtime algorithm switching NOT supported with other algorithms.
+  
+# v2.15.3-beta
+- [#1014](https://github.com/xmrig/xmrig/issues/1014) Fixed regression, default value for `algo` option was not applied.
+
+# v2.15.2-beta
+- [#1010](https://github.com/xmrig/xmrig/pull/1010#issuecomment-482632107) Added daemon support (solo mining).
+- Config subsystem was rewritten, internally JSON is primary format now.
+- Fixed regression, big HTTP responses was truncated.
+
+# v2.15.1-beta
+- [#1007](https://github.com/xmrig/xmrig/issues/1007) Old HTTP API backend based on libmicrohttpd, replaced to custom HTTP server (libuv + http_parser).
+- [#257](https://github.com/xmrig/xmrig-nvidia/pull/257) New logging subsystem, file and syslog now always without colors.
+
+# v2.15.0-beta
+- [#314](https://github.com/xmrig/xmrig-proxy/issues/314) Added donate over proxy feature and changed donation model.
+  - Added new options `algo-ext` and `access-password`.
+  - Added real graceful exit.
+
 # v2.14.4
 - Fixed MSVC 2019 version detection.
 - Removed obsolete automatic variants.
