@@ -38,6 +38,8 @@ enum Algo {
     CRYPTONIGHT_PICO,   /* CryptoNight (256 KB) */
     RANDOM_X,           /* RandomX */
     CRYPTONIGHT_EXTREMELITE,   /* CryptoNight (128 KB) */
+    ARGON2_256, /* Argon2 (256KB ScratchPad) */
+    ARGON2_512, /* Argon2 (512KB ScratchPad) */
     ALGO_MAX
 };
 
@@ -85,6 +87,9 @@ enum Variant {
     VARIANT_RX_LOKI = 18, // RandomX (Loki)
     VARIANT_UPX    = 19,  // CryptoNight variant upx
     VARIANT_UPX2   = 20,  // CryptoNight variant upx
+    VARIANT_CONCEAL = 21,  // CryptoNight variant upx
+    VARIANT_ARGON2_CHUKWA = 22,
+    VARIANT_ARGON2_WRKZ = 23,
     VARIANT_MAX
 };
 

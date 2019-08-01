@@ -69,6 +69,8 @@ static AlgoData const algorithms[] = {
     { "cryptonight/rwz",       "cn/rwz",       xmrig::CRYPTONIGHT,       xmrig::VARIANT_RWZ    },
     { "cryptonight/zls",       "cn/zls",       xmrig::CRYPTONIGHT,       xmrig::VARIANT_ZLS    },
     { "cryptonight/double",    "cn/double",    xmrig::CRYPTONIGHT,       xmrig::VARIANT_DOUBLE },
+    { "cryptonight/ccx",       "cn/ccx",       xmrig::CRYPTONIGHT,       xmrig::VARIANT_CONCEAL },
+    { "cryptonight/conceal",   "cn/conceal",   xmrig::CRYPTONIGHT,       xmrig::VARIANT_CONCEAL },
 
 #   ifdef XMRIG_ALGO_RANDOMX
     { "randomx/wow",           "rx/wow",       xmrig::RANDOM_X,          xmrig::VARIANT_RX_WOW },
@@ -108,6 +110,25 @@ static AlgoData const algorithms[] = {
 #   ifdef XMRIG_ALGO_CN_GPU
     { "cryptonight/gpu",        "cn/gpu",  xmrig::CRYPTONIGHT, xmrig::VARIANT_GPU },
 #   endif
+
+#   ifndef XMRIG_NO_ARGON2
+    { "argon2-512", "ar2-512",              xmrig::ARGON2_512, xmrig::VARIANT_ARGON2_CHUKWA },
+    { "argon2", "ar2",                      xmrig::ARGON2_512, xmrig::VARIANT_AUTO },
+    { "chukwa", "chukwa",                   xmrig::ARGON2_512, xmrig::VARIANT_ARGON2_CHUKWA },
+    { "argon2id512", "ard2-512",            xmrig::ARGON2_512, xmrig::VARIANT_ARGON2_CHUKWA },
+    { "argon2/chukwa", "ar2/chukwa",        xmrig::ARGON2_512, xmrig::VARIANT_ARGON2_CHUKWA },
+    { "argon2id/chukwa", "ar2id/chukwa",    xmrig::ARGON2_512, xmrig::VARIANT_ARGON2_CHUKWA },
+    { "trtl-chukwa", "trtl-chukwa",         xmrig::ARGON2_512, xmrig::VARIANT_ARGON2_CHUKWA },
+
+    { "argon2-256", "ar2-256",              xmrig::ARGON2_256, xmrig::VARIANT_ARGON2_WRKZ },
+    { "wrkz", "wrkz",                       xmrig::ARGON2_256, xmrig::VARIANT_ARGON2_WRKZ },
+    { "argon2id256", "ard2-256",            xmrig::ARGON2_256, xmrig::VARIANT_ARGON2_WRKZ },
+    { "argon2/wrkz", "ar2/wrkz",            xmrig::ARGON2_256, xmrig::VARIANT_ARGON2_WRKZ },
+    { "argon2id/wrkz", "ar2id/wrkz",        xmrig::ARGON2_256, xmrig::VARIANT_ARGON2_WRKZ },
+    { "chukwa-wrkz", "chukwa-wrkz",         xmrig::ARGON2_256, xmrig::VARIANT_ARGON2_WRKZ },
+    { "wrkz-chukwa", "wrkz-chukwa",         xmrig::ARGON2_256, xmrig::VARIANT_ARGON2_WRKZ },
+#   endif
+
 };
 
 
@@ -154,7 +175,10 @@ static const char *variants[] = {
     "rx/wow",
     "rx/loki",
     "upx",
-    "upx2"
+    "upx2",
+    "conceal",
+    "chukwa",
+    "wrkz",
 };
 
 
@@ -276,6 +300,14 @@ void xmrig::Algorithm::setAlgo(Algo algo)
 
     if (m_algo == CRYPTONIGHT_EXTREMELITE && m_variant == VARIANT_AUTO) {
         m_variant = xmrig::VARIANT_UPX2;
+    }
+
+    if (m_algo == ARGON2_256 && m_variant == VARIANT_AUTO) {
+        m_variant = xmrig::VARIANT_ARGON2_WRKZ;
+    }
+
+    if (m_algo == ARGON2_512 && m_variant == VARIANT_AUTO) {
+        m_variant = xmrig::VARIANT_ARGON2_CHUKWA;
     }
 }
 
