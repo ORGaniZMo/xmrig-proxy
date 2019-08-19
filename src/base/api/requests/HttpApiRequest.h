@@ -22,60 +22,49 @@
  *   along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef XMRIG_API_H
-#define XMRIG_API_H
+
+#ifndef XMRIG_HTTPAPIREQUEST_H
+#define XMRIG_HTTPAPIREQUEST_H
 
 
-#include <vector>
-
-
-#include "base/kernel/interfaces/IBaseListener.h"
+#include "base/api/requests/ApiRequest.h"
+#include "base/net/http/HttpApiResponse.h"
+#include "base/tools/String.h"
 
 
 namespace xmrig {
 
 
-class ApiRouter;
-class Base;
-class Httpd;
 class HttpData;
-class IApiListener;
-class IApiRequest;
-class String;
 
 
-class Api : public IBaseListener
+class HttpApiRequest : public ApiRequest
 {
 public:
-    Api(Base *base);
-    ~Api() override;
-
-    inline const char *id() const                   { return m_id; }
-    inline const char *workerId() const             { return m_workerId; }
-    inline void addListener(IApiListener *listener) { m_listeners.push_back(listener); }
-
-    void request(const HttpData &req);
-    void start();
-    void stop();
+    HttpApiRequest(const HttpData &req, bool restricted);
 
 protected:
-    void onConfigChanged(Config *config, Config *previousConfig) override;
+    inline bool hasParseError() const override           { return m_parsed == 2; }
+    inline const String &url() const override            { return m_url; }
+    inline rapidjson::Document &doc() override           { return m_res.doc(); }
+    inline rapidjson::Value &reply() override            { return m_res.doc(); }
+
+    bool accept() override;
+    const rapidjson::Value &json() const override;
+    Method method() const override;
+    void done(int status) override;
 
 private:
-    void exec(IApiRequest &request);
-    void genId(const String &id);
-    void genWorkerId(const String &id);
-
-    ApiRouter *m_v1;
-    Base *m_base;
-    char m_id[32];
-    char m_workerId[128];
-    Httpd *m_httpd;
-    std::vector<IApiListener *> m_listeners;
+    const HttpData &m_req;
+    HttpApiResponse m_res;
+    int m_parsed = 0;
+    rapidjson::Document m_body;
+    String m_url;
 };
 
 
 } // namespace xmrig
 
 
-#endif /* XMRIG_API_H */
+#endif // XMRIG_HTTPAPIREQUEST_H
+

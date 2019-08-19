@@ -22,41 +22,17 @@
  *   along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef XMRIG_SHARELOG_H
-#define XMRIG_SHARELOG_H
+
+#include "base/api/requests/ApiRequest.h"
 
 
-#include "interfaces/IEventListener.h"
-
-
-namespace xmrig {
-
-
-class AcceptEvent;
-class Controller;
-class Stats;
-
-
-class ShareLog : public IEventListener
+xmrig::ApiRequest::ApiRequest(Source source, bool restricted) :
+    m_restricted(restricted),
+    m_source(source)
 {
-public:
-    ShareLog(Controller *controller, const Stats &stats);
-    ~ShareLog() override;
-
-protected:
-    void onEvent(IEvent *event) override;
-    void onRejectedEvent(IEvent *event) override;
-
-private:
-    void accept(const AcceptEvent *event);
-    void reject(const AcceptEvent *event);
-
-    const Stats &m_stats;
-    Controller *m_controller;
-};
+}
 
 
-} /* namespace xmrig */
-
-
-#endif /* XMRIG_SHARELOG_H */
+xmrig::ApiRequest::~ApiRequest()
+{
+}

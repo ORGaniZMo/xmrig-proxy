@@ -4,8 +4,7 @@
  * Copyright 2014      Lucas Jones <https://github.com/lucasjones>
  * Copyright 2014-2016 Wolf9466    <https://github.com/OhGodAPet>
  * Copyright 2016      Jay D Dee   <jayddee246@gmail.com>
- * Copyright 2017-2018 XMR-Stak    <https://github.com/fireice-uk>, <https://github.com/psychocrypt>
- * Copyright 2016-2018 XMRig       <https://github.com/xmrig>, <support@xmrig.com>
+ * Copyright 2016-2018 XMRig       <support@xmrig.com>
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -21,23 +20,28 @@
  *   along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __MM_MALLOC_PORTABLE_H__
-#define __MM_MALLOC_PORTABLE_H__
+#ifndef XMRIG_IAPILISTENER_H
+#define XMRIG_IAPILISTENER_H
 
 
-#ifdef _WIN32
-#   ifdef __GNUC__
-#       include <mm_malloc.h>
-#   else
-#       include <malloc.h>
+namespace xmrig {
+
+
+class IApiRequest;
+
+
+class IApiListener
+{
+public:
+    virtual ~IApiListener() = default;
+
+#   ifdef XMRIG_FEATURE_API
+    virtual void onRequest(IApiRequest &request) = 0;
 #   endif
-#else
-#   if defined(XMRIG_ARM) && !defined(__clang__)
-#       include "aligned_malloc.h"
-#   else
-#       include <mm_malloc.h>
-#   endif
-#endif
+};
 
 
-#endif /* __MM_MALLOC_PORTABLE_H__ */
+} /* namespace xmrig */
+
+
+#endif // XMRIG_IAPILISTENER_H

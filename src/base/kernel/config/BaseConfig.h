@@ -29,7 +29,6 @@
 #include "base/kernel/interfaces/IConfig.h"
 #include "base/net/http/Http.h"
 #include "base/net/stratum/Pools.h"
-#include "common/xmrig.h"
 
 
 struct option;
@@ -57,9 +56,9 @@ public:
     inline const String &apiId() const             { return m_apiId; }
     inline const String &apiWorkerId() const       { return m_apiWorkerId; }
     inline uint32_t printTime() const              { return m_printTime; }
+    inline uint32_t version() const                { return m_version; }
 
     inline bool isWatch() const override                   { return m_watch && !m_fileName.isNull(); }
-    inline const Algorithm &algorithm() const override     { return m_algorithm; }
     inline const String &fileName() const override         { return m_fileName; }
     inline void setFileName(const char *fileName) override { m_fileName = fileName; }
 
@@ -69,13 +68,12 @@ public:
     void printVersions();
 
 protected:
-    Algorithm m_algorithm;
-    bool m_autoSave;
-    bool m_background;
-    bool m_dryRun;
-    bool m_syslog;
-    bool m_upgrade;
-    bool m_watch;
+    bool m_autoSave    = true;
+    bool m_background  = false;
+    bool m_dryRun      = false;
+    bool m_syslog      = false;
+    bool m_upgrade     = false;
+    bool m_watch       = true;
     Http m_http;
     Pools m_pools;
     String m_apiId;
@@ -83,7 +81,8 @@ protected:
     String m_fileName;
     String m_logFile;
     String m_userAgent;
-    uint32_t m_printTime;
+    uint32_t m_printTime = 60;
+    uint32_t m_version   = 0;
 
 private:
     inline void setPrintTime(uint32_t printTime) { if (printTime <= 3600) { m_printTime = printTime; } }

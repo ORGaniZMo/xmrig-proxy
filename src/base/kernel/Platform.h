@@ -22,45 +22,42 @@
  *   along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef XMRIG_ACCESSLOG_H
-#define XMRIG_ACCESSLOG_H
+#ifndef XMRIG_PLATFORM_H
+#define XMRIG_PLATFORM_H
 
 
-#include <uv.h>
+#include <stdint.h>
 
 
-#include "interfaces/IEventListener.h"
+#include "base/tools/String.h"
 
 
-class Stats;
-
-
-namespace xmrig {
-
-
-class Controller;
-
-
-class AccessLog : public IEventListener
+class Platform
 {
 public:
-    AccessLog(Controller *controller);
-    ~AccessLog() override;
+    static inline bool trySetThreadAffinity(int64_t cpu_id)
+    {
+        if (cpu_id < 0) {
+            return false;
+        }
 
-protected:
-    void onEvent(IEvent *event) override;
-    void onRejectedEvent(IEvent *event) override;
+        return setThreadAffinity(static_cast<uint64_t>(cpu_id));
+    }
+
+    static bool setThreadAffinity(uint64_t cpu_id);
+    static uint32_t setTimerResolution(uint32_t resolution);
+    static void init(const char *userAgent);
+    static void restoreTimerResolution();
+    static void setProcessPriority(int priority);
+    static void setThreadPriority(int priority);
+
+    static inline const char *userAgent() { return m_userAgent; }
 
 private:
-    static void onWrite(uv_fs_t *req);
+    static char *createUserAgent();
 
-    void write(const char *fmt, ...);
-
-    int m_file;
+    static xmrig::String m_userAgent;
 };
 
 
-} /* namespace xmrig */
-
-
-#endif /* XMRIG_ACCESSLOG_H */
+#endif /* XMRIG_PLATFORM_H */
