@@ -1,3 +1,11 @@
+# v5.0.0
+- Proxy rebased to latest miner codebase.
+  - [#1068](https://github.com/xmrig/xmrig/pull/1068) Added support for `self-select` stratum protocol extension.
+  - [#1227](https://github.com/xmrig/xmrig/pull/1227) Added new algorithm `rx/arq`, RandomX variant for upcoming ArQmA fork.
+
+# v3.2.1
+- [#349](https://github.com/xmrig/xmrig-proxy/issues/349) Fixed command line option `--coin`.
+
 # v3.2.0
 - Added per pool option `coin` with single possible value `monero` for pools without algorithm negotiation, for upcoming Monero fork.
 - [#1183](https://github.com/xmrig/xmrig/issues/1183) Fixed compatibility with systemd.
