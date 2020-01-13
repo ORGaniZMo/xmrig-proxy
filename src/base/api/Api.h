@@ -32,6 +32,7 @@
 
 #include "base/kernel/interfaces/IBaseListener.h"
 #include "base/tools/Object.h"
+#include "base/tools/String.h"
 
 
 namespace xmrig {
@@ -71,7 +72,7 @@ private:
 
     Base *m_base;
     char m_id[32]{};
-    char m_workerId[128]{};
+    String m_workerId;
     const uint64_t m_timestamp;
     Httpd *m_httpd = nullptr;
     std::vector<IApiListener *> m_listeners;

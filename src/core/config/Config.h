@@ -26,10 +26,6 @@
 #define XMRIG_CONFIG_H
 
 
-#include <cstdint>
-#include <vector>
-
-
 #include "base/kernel/config/BaseConfig.h"
 #include "base/tools/String.h"
 #include "proxy/BindHost.h"
@@ -42,6 +38,10 @@
 #endif
 
 
+#include <cstdint>
+#include <vector>
+
+
 namespace xmrig {
 
 
@@ -50,17 +50,6 @@ class IConfigListener;
 class Process;
 
 
-/**
- * @brief The Config class
- *
- * Options with dynamic reload:
- *   colors
- *   debug
- *   verbose
- *   custom-diff (only for new connections)
- *   api/worker-id
- *   pools/
- */
 class Config : public BaseConfig
 {
 public:
@@ -69,7 +58,7 @@ public:
         SIMPLE_MODE
     };
 
-    Config();
+    Config() = default;
 
     bool isTLS() const;
     const char *modeName() const;
@@ -80,6 +69,7 @@ public:
     void toggleVerbose();
 
     inline bool hasAlgoExt() const                 { return isDonateOverProxy() ? m_algoExt : true; }
+    inline bool isCustomDiffStats() const          { return m_customDiffStats; }
     inline bool isDebug() const                    { return m_debug; }
     inline bool isDonateOverProxy() const          { return m_pools.donateLevel() == 0 || m_mode == SIMPLE_MODE; }
     inline bool isShouldSave() const               { return m_upgrade && isAutoSave(); }
@@ -103,6 +93,7 @@ private:
 
     BindHosts m_bind;
     bool m_algoExt              = true;
+    bool m_customDiffStats      = false;
     bool m_debug                = false;
     int m_mode                  = NICEHASH_MODE;
     int m_reuseTimeout          = 0;

@@ -22,49 +22,26 @@
  *   along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef XMRIG_LOGINEVENT_H
-#define XMRIG_LOGINEVENT_H
-
-
-#include <cstdint>
+#ifndef XMRIG_ENV_H
+#define XMRIG_ENV_H
 
 
 #include "base/tools/String.h"
-#include "crypto/common/Algorithm.h"
-#include "proxy/events/MinerEvent.h"
-#include "rapidjson/fwd.h"
 
 
 namespace xmrig {
 
 
-class LoginEvent : public MinerEvent
+class Env
 {
 public:
-    static inline LoginEvent *create(Miner *miner, int64_t id, const Algorithms &algorithms, const rapidjson::Value &params)
-    {
-        return new (m_buf) LoginEvent(miner, id, algorithms, params);
-    }
-
-
-    const Algorithms &algorithms;
-    const int64_t loginId;
-    const rapidjson::Value &params;
-    int error = -1;
-    String flow;
-
-
-protected:
-    inline LoginEvent(Miner *miner, int64_t id, const Algorithms &algorithms, const rapidjson::Value &params)
-        : MinerEvent(LoginType, miner),
-          algorithms(algorithms),
-          loginId(id),
-          params(params)
-    {}
+    static String expand(const char *in);
+    static String get(const String &name);
+    static String hostname();
 };
 
 
 } /* namespace xmrig */
 
 
-#endif /* XMRIG_LOGINEVENT_H */
+#endif /* XMRIG_ENV_H */
